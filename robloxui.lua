@@ -9,6 +9,17 @@ local protectui = protectgui or (function() end)
 local playerController = players.LocalPlayer; if not playerController then return end
 local playerMouse = playerController:GetMouse(); if not playerMouse then return end
 
+local colors = {
+  outline = Color3.fromRGB(129, 129, 128),
+  menuMain = Color3.fromRGB(42, 42, 42),
+  tabSelected = Color3.fromRGB(48, 48, 48),
+  tabUnselected = Color3.fromRGB(79, 83, 94),
+  textSelected = Color3.fromRGB(144, 99, 161),
+  textUnselected = Color3.fromRGB(189, 192, 195),
+  holderMain = Color3.fromRGB(48, 48, 48),
+  itemPurple = Color3.fromRGB(205, 114, 214),
+  itemGray = Color3.fromRGB(121, 121, 121)
+}
 
 function menu:createWindow(windowInfo)
   if not windowInfo then return end
@@ -24,6 +35,8 @@ function menu:createWindow(windowInfo)
   windowFrame.Name = tostring(math.random(0, 100000))
   windowFrame.Size = UDim2.new(0, 460, 0, 400)
   windowFrame.Position = UDim2.new(0, 270, 0, 270)
+  windowFrame.BorderColor3 = colors.outline
+  windowFrame.BorderSizePixel = 1
   
   local tabs = {}
   
@@ -35,7 +48,10 @@ function menu:createWindow(windowInfo)
     local tabButton = Instance.new("TextButton", windowFrame)
     tabButton.Name = tostring(math.random(0, 100000))
     tabButton.Text = tab.name
-    tabButton.Size = UDim2.new()
+    tabButton.BackgroundColor3 = colors.tabUnselected
+    tabButton.TextColor3 = colors.textUnselected
+    tabButton.BorderColor3 = colors.outline
+    tabButton.BorderSizePixel = 1
     
     tab.tabButton = tabButton
     
@@ -43,8 +59,9 @@ function menu:createWindow(windowInfo)
     table.insert(tabs, tab)
     
     for i, t in ipairs(tabs) do
-      t.tabButton.Size = UDim2.new(0, windowFrame.AbsoluteSize.X / #tabs, 0, 45)
-      t.tabButton.Position = UDim2.new(0, (i - 1) * (windowFrame.AbsoluteSize.X / #tabs), 0, 0)
+      t.tabButton.Size = UDim2.new(1 / #tabs, 0, 0, 45)
+      t.tabButton.Position = UDim2.new((i - 1) / #tabs, 0, 0, 0)
+
     end
     return tab
   end
@@ -86,7 +103,4 @@ function menu:createWindow(windowInfo)
   return window
 end
 
-
-
 return menu
-
