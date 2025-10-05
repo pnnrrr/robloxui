@@ -21,7 +21,7 @@ function menu:createWindow(windowInfo)
   
   local window = Instance.new("Frame", screenui)
   window.Name = tostring(math.random(0, 100000))
-  window.Size = UDim2.new(0, 440, 0, 380)
+  window.Size = UDim2.new(0, 460, 0, 420)
   window.Position = UDim2.new(0, 270, 0, 270)
   
   local tabs = {}
