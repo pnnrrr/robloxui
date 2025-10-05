@@ -102,7 +102,7 @@ function menu:createWindow(windowInfo)
     columnLeft.BackgroundTransparency = 1
     
     local leftLayout = Instance.new("UIListLayout", columnLeft)
-    leftLayout.Padding = UDim.new(0, 8)
+    leftLayout.Padding = UDim.new(0, 9)
     
     local columnRight = Instance.new("Frame", tabHolder)
     columnRight.Name = tostring(math.random(0, 100000))
@@ -112,7 +112,7 @@ function menu:createWindow(windowInfo)
     columnRight.BackgroundTransparency = 1
     
     local rightLayout = Instance.new("UIListLayout", columnRight)
-    rightLayout.Padding = UDim.new(0, 8)
+    rightLayout.Padding = UDim.new(0, 9)
     
     
     
@@ -169,6 +169,43 @@ function menu:createWindow(windowInfo)
     
     function tab:slider(sliderInfo)
       if not sliderInfo then return end
+      local sliderHolder = Instance.new("Frame")
+      sliderHolder.Name = tostring(math.random(0, 100000))
+      sliderHolder.Size = UDim2.new(0, 170, 0, 35)
+      sliderHolder.BackgroundTransparency = 1
+      
+      if(sliderInfo.column == 0) then sliderHolder.Parent = columnLeft end
+      if(sliderInfo.column == 1) then sliderHolder.Parent = columnRight end
+      
+      
+      local sliderText = Instance.new("TextLabel", sliderHolder)
+      sliderText.Text = sliderInfo.text
+      sliderText.TextColor3 = colors.textUnselected
+      sliderText.TextSize = 9
+      sliderText.TextStrokeTransparency = 0.6
+      sliderText.BackgroundTransparency = 1
+      sliderText.Size = UDim2.new(0, 20, 0, 20)
+      sliderText.Position = UDim2.new(0, 10, 0, 0)
+      sliderText.TextXAlignment = Enum.TextXAlignment.Left
+      sliderText.BackgroundTransparency = 1
+      
+      local valueText = Instance.new("TextLabel", sliderHolder)
+      valueText.Text = tostring(sliderInfo.value)
+      valueText.TextColor3 = colors.textUnselected
+      valueText.TextSize= 9
+      valueText.TextStrokeTransparency = 0.6
+      valueText.BackgroundTransparency = 1
+      valueText.Size = UDim2.new(0, 20, 0, 20)
+      valueText.TextXAlignment = Enum.TextXAlignment.Left
+      valueText.Position = UDim2.new(0, 140, 0, 0)
+      
+      local sliderBack = Instance.new("TextLabel", sliderHolder)
+      sliderBack.Text = ""
+      sliderBack.BackgroundColor3 = colors.itemPurple
+      sliderBack.Size = UDim2.new(0, 135, 0, 10)
+      sliderBack.Position = UDim2.new(0, 0, 0, 25)
+      sliderBack.BorderSizePixel = 0
+      
     end
     
     function tab:dropdown(dropdownInfo)
