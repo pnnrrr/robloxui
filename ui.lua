@@ -1,3 +1,5 @@
+-- loadstring(game:HttpGet("https://raw.githubusercontent.com/pnnrrr/robloxui/refs/heads/main/robloxui.lua"))()
+
 local menu = {}
 
 local coreui = game:GetService("CoreGui"); if not coreui then return end
@@ -97,12 +99,22 @@ function menu:createWindow(windowInfo)
     columnLeft.AnchorPoint = Vector2.new(0.5, 0.5)
     columnLeft.Size = UDim2.new(0, 170, 0, 230)
     columnLeft.Position = UDim2.new(0.27, 0, 0.55, 0)
+    columnLeft.BackgroundTransparency = 1
+    
+    local leftLayout = Instance.new("UIListLayout", columnLeft)
+    leftLayout.Padding = UDim.new(0, 8)
     
     local columnRight = Instance.new("Frame", tabHolder)
     columnRight.Name = tostring(math.random(0, 100000))
     columnRight.AnchorPoint = Vector2.new(0.5, 0.5)
     columnRight.Size = UDim2.new(0, 170, 0, 230)
     columnRight.Position = UDim2.new(0.725, 0, 0.55, 0)
+    columnRight.BackgroundTransparency = 1
+    
+    local rightLayout = Instance.new("UIListLayout", columnRight)
+    rightLayout.Padding = UDim.new(0, 8)
+    
+    
     
     tabButton.MouseButton1Click:Connect(function()
       for _, t in ipairs(tabs) do
@@ -119,6 +131,40 @@ function menu:createWindow(windowInfo)
     
     function tab:check(checkInfo)
       if not checkInfo then return end
+      local checkHolder = Instance.new("Frame")
+      checkHolder.Name = tostring(math.random(0, 100000))
+      checkHolder.Size = UDim2.new(0, 170, 0, 25)
+      checkHolder.BackgroundTransparency = 1
+      checkHolder.BorderSizePixel = 0
+      
+      if (checkInfo.column == 0) then checkHolder.Parent = columnLeft end
+      if (checkInfo.column == 1) then checkHolder.Parent = columnRight end
+      
+      local checkButton = Instance.new("TextButton", checkHolder)
+      checkButton.Text = ""
+      checkButton.Size = UDim2.new(0, 20, 0, 20)
+      checkButton.BorderColor3 = colors.outline
+      checkButton.BorderSizePixel = 1
+      
+      local checkText = Instance.new("TextLabel", checkHolder)
+      checkText.Text = checkInfo.text
+      checkText.TextSize = 9
+      checkText.TextColor3 = colors.textUnselected
+      checkText.TextStrokeTransparency = 0.6
+      checkText.BackgroundTransparency = 1
+      checkText.Size = UDim2.new(0, 20, 0, 20)
+      checkText.Position = UDim2.new(0, 40, 0, 0)
+      checkText.TextXAlignment = Enum.TextXAlignment.Left
+      checkText.BackgroundTransparency = 1
+      
+      if (checkInfo.bool == false) then checkButton.BackgroundColor3 = colors.itemGray end
+      if (checkInfo.bool == true) then checkButton.BackgroundColor3 = colors.itemPurple end
+      
+      checkButton.MouseButton1Click:Connect(function()
+        checkInfo.bool = not checkInfo.bool
+        if (checkInfo.bool == false) then checkButton.BackgroundColor3 = colors.itemGray end
+        if (checkInfo.bool == true) then checkButton.BackgroundColor3 = colors.itemPurple end
+        end)
     end
     
     function tab:slider(sliderInfo)
