@@ -35,6 +35,7 @@ function menu:createWindow(windowInfo)
   windowFrame.Name = tostring(math.random(0, 100000))
   windowFrame.Size = UDim2.new(0, 460, 0, 400)
   windowFrame.Position = UDim2.new(0, 270, 0, 270)
+  windowFrame.BackgroundColor3 = colors.menuMain
   windowFrame.BorderColor3 = colors.outline
   windowFrame.BorderSizePixel = 1
   
@@ -47,22 +48,61 @@ function menu:createWindow(windowInfo)
     
     local tabButton = Instance.new("TextButton", windowFrame)
     tabButton.Name = tostring(math.random(0, 100000))
+    tabButton.TextSize = 9
     tabButton.Text = tab.name
-    tabButton.BackgroundColor3 = colors.tabUnselected
     tabButton.TextColor3 = colors.textUnselected
+    tabButton.TextStrokeTransparency = 0.6
+    tabButton.BackgroundColor3 = colors.tabUnselected
     tabButton.BorderColor3 = colors.outline
     tabButton.BorderSizePixel = 1
     
     tab.tabButton = tabButton
-    
-    
     table.insert(tabs, tab)
     
     for i, t in ipairs(tabs) do
       t.tabButton.Size = UDim2.new(1 / #tabs, 0, 0, 45)
       t.tabButton.Position = UDim2.new((i - 1) / #tabs, 0, 0, 0)
-
     end
+    
+    local tabHolder = Instance.new("Frame", windowFrame)
+    tabHolder.Name = tostring(math.random(0, 100000))
+    tabHolder.Visible = false
+    tabHolder.BackgroundColor3 = colors.holderMain
+    tabHolder.BorderColor3 = colors.outline
+    tabHolder.BorderSizePixel = 1
+    tabHolder.Size = UDim2.new(0, 400, 0, 280)
+    tabHolder.AnchorPoint = Vector2.new(0.5, 0.5)
+    tabHolder.Size = UDim2.new(0, 420, 0, 310)
+    tabHolder.Position = UDim2.new(0.5, 0, 0.5, 45 / 2)
+    
+    tab.tabHolder = tabHolder
+    
+    local holderTitle = Instance.new("TextLabel", tabHolder)
+    holderTitle.Name = tostring(math.random(0, 100000))
+    holderTitle.Text = tab.name
+    holderTitle.TextSize = 8
+    holderTitle.TextColor3 = colors.textSelected
+    holderTitle.TextStrokeTransparency = 0.6
+    holderTitle.AnchorPoint = Vector2.new(0.5, 0.5)
+    holderTitle.Position = UDim2.new(0.5, 0, 0.5, -130)
+    
+    if(#tabs == 1) then
+      tabButton.BackgroundColor3 = colors.tabSelected
+      tabButton.TextColor3 = colors.textSelected
+      tabHolder.Visible = true
+    end
+    
+    tabButton.MouseButton1Click:Connect(function()
+      for _, t in ipairs(tabs) do
+        t.tabButton.BackgroundColor3 = colors.tabUnselected
+        t.tabButton.TextColor3 = colors.textUnselected
+        t.tabHolder.Visible = false
+      end
+      tabButton.BackgroundColor3 = colors.tabSelected
+      tabButton.TextColor3 = colors.textSelected
+      tabHolder.Visible = true
+    end)
+    
     return tab
   end
   
