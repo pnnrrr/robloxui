@@ -92,6 +92,18 @@ function menu:createWindow(windowInfo)
       tabHolder.Visible = true
     end
     
+    local columnLeft = Instance.new("Frame", tabHolder)
+    columnLeft.Name = tostring(math.random(0, 100000))
+    columnLeft.AnchorPoint = Vector2.new(0.5, 0.5)
+    columnLeft.Size = UDim2.new(0, 170, 0, 230)
+    columnLeft.Position = UDim2.new(0.27, 0, 0.55, 0)
+    
+    local columnRight = Instance.new("Frame", tabHolder)
+    columnRight.Name = tostring(math.random(0, 100000))
+    columnRight.AnchorPoint = Vector2.new(0.5, 0.5)
+    columnRight.Size = UDim2.new(0, 170, 0, 230)
+    columnRight.Position = UDim2.new(0.725, 0, 0.55, 0)
+    
     tabButton.MouseButton1Click:Connect(function()
       for _, t in ipairs(tabs) do
         t.tabButton.BackgroundColor3 = colors.tabUnselected
@@ -102,6 +114,24 @@ function menu:createWindow(windowInfo)
       tabButton.TextColor3 = colors.textSelected
       tabHolder.Visible = true
     end)
+    
+    
+    
+    function tab:check(checkInfo)
+      if not checkInfo then return end
+    end
+    
+    function tab:slider(sliderInfo)
+      if not sliderInfo then return end
+    end
+    
+    function tab:dropdown(dropdownInfo)
+      if not dropdownInfo then return end
+    end
+    
+    function tab:input(inputInfo)
+      if not inputInfo then return end
+    end
     
     return tab
   end
