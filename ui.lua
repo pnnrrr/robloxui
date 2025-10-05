@@ -114,8 +114,6 @@ function menu:createWindow(windowInfo)
     local rightLayout = Instance.new("UIListLayout", columnRight)
     rightLayout.Padding = UDim.new(0, 9)
     
-    
-    
     tabButton.MouseButton1Click:Connect(function()
       for _, t in ipairs(tabs) do
         t.tabButton.BackgroundColor3 = colors.tabUnselected
@@ -126,8 +124,6 @@ function menu:createWindow(windowInfo)
       tabButton.TextColor3 = colors.textSelected
       tabHolder.Visible = true
     end)
-    
-    
     
     function tab:check(checkInfo)
       if not checkInfo then return end
@@ -155,7 +151,6 @@ function menu:createWindow(windowInfo)
       checkText.Size = UDim2.new(0, 20, 0, 20)
       checkText.Position = UDim2.new(0, 40, 0, 0)
       checkText.TextXAlignment = Enum.TextXAlignment.Left
-      checkText.BackgroundTransparency = 1
       
       if (checkInfo.bool == false) then checkButton.BackgroundColor3 = colors.itemGray end
       if (checkInfo.bool == true) then checkButton.BackgroundColor3 = colors.itemPurple end
@@ -164,7 +159,7 @@ function menu:createWindow(windowInfo)
         checkInfo.bool = not checkInfo.bool
         if (checkInfo.bool == false) then checkButton.BackgroundColor3 = colors.itemGray end
         if (checkInfo.bool == true) then checkButton.BackgroundColor3 = colors.itemPurple end
-        end)
+      end)
     end
     
     function tab:slider(sliderInfo)
@@ -173,96 +168,122 @@ function menu:createWindow(windowInfo)
       sliderHolder.Name = tostring(math.random(0, 100000))
       sliderHolder.Size = UDim2.new(0, 170, 0, 35)
       sliderHolder.BackgroundTransparency = 1
-      
-      if(sliderInfo.column == 0) then sliderHolder.Parent = columnLeft end
-      if(sliderInfo.column == 1) then sliderHolder.Parent = columnRight end
-      
-      
+
+      if sliderInfo.column == 0 then
+        sliderHolder.Parent = columnLeft
+      else
+        sliderHolder.Parent = columnRight
+      end
+
       local sliderText = Instance.new("TextLabel", sliderHolder)
       sliderText.Text = sliderInfo.text
       sliderText.TextColor3 = colors.textUnselected
       sliderText.TextSize = 9
       sliderText.TextStrokeTransparency = 0.6
       sliderText.BackgroundTransparency = 1
-      sliderText.Size = UDim2.new(0, 20, 0, 20)
+      sliderText.Size = UDim2.new(0, 100, 0, 20)
       sliderText.Position = UDim2.new(0, 10, 0, 0)
       sliderText.TextXAlignment = Enum.TextXAlignment.Left
-      sliderText.BackgroundTransparency = 1
-      
+
       local valueText = Instance.new("TextLabel", sliderHolder)
       valueText.Text = tostring(sliderInfo.value)
       valueText.TextColor3 = colors.textUnselected
-      valueText.TextSize= 9
+      valueText.TextSize = 9
       valueText.TextStrokeTransparency = 0.6
       valueText.BackgroundTransparency = 1
-      valueText.Size = UDim2.new(0, 20, 0, 20)
+      valueText.Size = UDim2.new(0, 40, 0, 20)
+      valueText.Position = UDim2.new(0, 130, 0, 0)
       valueText.TextXAlignment = Enum.TextXAlignment.Left
-      valueText.Position = UDim2.new(0, 125, 0, 0)
-      
-      local sliderBack = Instance.new("TextLabel", sliderHolder)
-      sliderBack.Text = ""
-      sliderBack.BackgroundColor3 = colors.itemPurple
-      sliderBack.Size = UDim2.new(0, 135, 0, 10)
-      sliderBack.Position = UDim2.new(0, 0, 0, 25)
+
+      local sliderBack = Instance.new("Frame", sliderHolder)
+      sliderBack.BackgroundColor3 = colors.itemGray
+      sliderBack.Size = UDim2.new(0, 135, 0, 8)
+      sliderBack.Position = UDim2.new(0, 10, 0, 25)
       sliderBack.BorderSizePixel = 0
-      
-      local sliderButton = Instance.new("TextButton", sliderHolder)
+
+      local sliderButton = Instance.new("TextButton", sliderBack)
       sliderButton.Text = ""
-      sliderButton.BackgroundColor3 = colors.itemGray
+      sliderButton.BackgroundColor3 = colors.itemPurple
       sliderButton.Size = UDim2.new(0, 10, 0, 14)
       sliderButton.BorderSizePixel = 0
-      sliderButton.Position = UDim2.new(0, 0, 0, 23)
-      
+      sliderButton.Position = UDim2.new(0, 0, 0, -3)
+
+      local sliderActive = false
+
+      sliderButton.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+          sliderActive = true
+        end
+      end)
+      sliderButton.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+          sliderActive = false
+        end
+      end)
+
+      -- Click anywhere on sliderBack
+      sliderBack.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+          local absPos = sliderBack.AbsolutePosition.X
+          local absSize = sliderBack.AbsoluteSize.X
+          local percent = math.clamp((input.Position.X - absPos) / absSize, 0, 1)
+          local value = math.floor(sliderInfo.min + (sliderInfo.max - sliderInfo.min) * percent)
+
+          sliderButton.Position = UDim2.new(0, percent * (absSize - sliderButton.AbsoluteSize.X), 0, -3)
+          valueText.Text = tostring(value)
+          sliderInfo.value = value
+          if sliderInfo.callback then
+            pcall(sliderInfo.callback, value)
+          end
+        end
+      end)
+
+      userinput.InputChanged:Connect(function(input)
+        if sliderActive and input.UserInputType == Enum.UserInputType.MouseMovement then
+          local absPos = sliderBack.AbsolutePosition.X
+          local absSize = sliderBack.AbsoluteSize.X
+          local percent = math.clamp((input.Position.X - absPos) / absSize, 0, 1)
+          local value = math.floor(sliderInfo.min + (sliderInfo.max - sliderInfo.min) * percent)
+
+          sliderButton.Position = UDim2.new(0, percent * (absSize - sliderButton.AbsoluteSize.X), 0, -3)
+          valueText.Text = tostring(value)
+          sliderInfo.value = value
+          if sliderInfo.callback then
+            pcall(sliderInfo.callback, value)
+          end
+        end
+      end)
     end
-    
-    function tab:dropdown(dropdownInfo)
-      if not dropdownInfo then return end
-    end
-    
-    function tab:input(inputInfo)
-      if not inputInfo then return end
-    end
-    
+
     return tab
   end
-  
-  run.RenderStepped:Connect(function(delta)
-    if (dragging) then
-      windowFrame.Position = UDim2.new(
-        0,
-        (playerMouse.X - offset.X),
-        0,
-        (playerMouse.Y - offset.Y)
-        )
+
+  userinput.InputBegan:Connect(function(input)
+    if input.KeyCode == windowInfo.key then
+      windowFrame.Visible = not windowFrame.Visible
     end
   end)
-  
+
   windowFrame.InputBegan:Connect(function(input)
-    if (input.UserInputType == Enum.UserInputType.MouseButton1) then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
       dragging = true
-      offset = Vector2.new(
-        playerMouse.X - windowFrame.AbsolutePosition.X,
-        playerMouse.Y - windowFrame.AbsolutePosition.Y
-        )
+      offset = input.Position - windowFrame.Position
     end
   end)
-  
+
   windowFrame.InputEnded:Connect(function(input)
-    if(input.UserInputType == Enum.UserInputType.MouseButton1) then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
       dragging = false
     end
   end)
-  
-  userinput.InputBegan:Connect(function(input, processed)
-    if processed then return end
-    if (input.KeyCode == windowInfo.key) then
-      windowFrame.Visible = not windowFrame.Visible
+
+  userinput.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+      windowFrame.Position = input.Position - offset
     end
-    
   end)
+
   return window
 end
-
-
 
 return menu
