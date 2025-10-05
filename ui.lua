@@ -197,7 +197,7 @@ function menu:createWindow(windowInfo)
       valueText.BackgroundTransparency = 1
       valueText.Size = UDim2.new(0, 20, 0, 20)
       valueText.TextXAlignment = Enum.TextXAlignment.Left
-      valueText.Position = UDim2.new(0, 140, 0, 0)
+      valueText.Position = UDim2.new(0, 125, 0, 0)
       
       local sliderBack = Instance.new("TextLabel", sliderHolder)
       sliderBack.Text = ""
@@ -205,6 +205,13 @@ function menu:createWindow(windowInfo)
       sliderBack.Size = UDim2.new(0, 135, 0, 10)
       sliderBack.Position = UDim2.new(0, 0, 0, 25)
       sliderBack.BorderSizePixel = 0
+      
+      local sliderButton = Instance.new("TextButton", sliderHolder)
+      sliderButton.Text = ""
+      sliderButton.BackgroundColor3 = colors.itemGray
+      sliderButton.Size = UDim2.new(0, 10, 0, 14)
+      sliderButton.BorderSizePixel = 0
+      sliderButton.Position = UDim2.new(0, 0, 0, 23)
       
     end
     
@@ -255,5 +262,7 @@ function menu:createWindow(windowInfo)
   end)
   return window
 end
+
+
 
 return menu
